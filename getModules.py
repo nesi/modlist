@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import subprocess, re, json, getModulesFunc, socket, requests
+import subprocess, re, json, socket, requests
 
 def get_between(string_start, string_end):
 
