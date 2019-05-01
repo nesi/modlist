@@ -163,7 +163,15 @@ def deep_merge(over, under):
 
 
 # Start
-settings=json.load('settings.json')
+if not os.path.exists('settings.json')
+    print("No 'settings.json' file")
+    with open('settings.json', "w") as json_file: 
+        json_file.write(json.dumps({"remote":"","token":"","update_maui":true,"update_mahuika":true}))
+    print("Empty 'settings.json' file created")
+else
+    with open('settings.json') as json_file: 
+        settings=json.load(json_file)
+
 # Update
 
 # Whether to update.
@@ -192,7 +200,7 @@ print("Updated as of " + datetime)
 
 output_dict={"modules":mergedData,"date":datetime}
 
-f = open("moduleList.json", "w")
-f.write(json.dumps(mergedData))
-f.close()
+with open('moduleList.json', "w") as json_file: 
+    json_file.write(json.dumps(mergedData))
+
 print("Done!")
