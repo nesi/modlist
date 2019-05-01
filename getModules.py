@@ -61,8 +61,9 @@ def get_mahuika(call_avail):
         mahuikaData = {}
     
     if call_avail :
+        print("Reading modules from Mahuika")
         #Check if running on mahuika01, and recheck modules
-        if socket.gethostname()=='mahuika01':
+        if socket.gethostname()=='mahuika01' or socket.gethostname()=='mahuika02':
 
             print("Working...")
             #Call 
@@ -108,8 +109,9 @@ def get_maui(call_avail):
         mauiData = {}
 
     if call_avail :
-    #Check if running
-        if  socket.gethostname()=='maui01':
+        print("Reading modules from Maui")
+        #Check if running
+        if  socket.gethostname()=='maui01' or socket.gethostname()=='maui02':
 
             print("Working...")
 
@@ -161,10 +163,12 @@ def deep_merge(over, under):
 
 
 # Start
+settings=json.load('settings.json')
+# Update
 
 # Whether to update.
-mahuikaData = get_mahuika(True)
-mauiData = get_maui(True)
+mahuikaData = get_mahuika(settings.update_mahuika)
+mauiData = get_maui(settings.update_maui)
 
 #Merge cluster lists
 mergedData=deep_merge(mauiData,mahuikaData)
@@ -177,11 +181,16 @@ with open('domainTags.json') as json_file:
             if app in mergedData:
                 mergedData[app]["cats"]=[key]
             else:
-                print("Error! Application '" + app + "' not found.")
+                print("Error! Domain tag '" + app + "' does not correspond to a application on the platform.")
  
 #Apply Overwrites
 with open('overwriteApps.json') as json_file: 
         mergedData=deep_merge(mergedData, json.load(json_file))
+
+datetime=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+print("Updated as of " + datetime) 
+
+output_dict={"modules":mergedData,"date":datetime}
 
 f = open("moduleList.json", "w")
 f.write(json.dumps(mergedData))
