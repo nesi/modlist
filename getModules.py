@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import subprocess, re, json, socket, requests
+import subprocess, re, json, socket, requests, os, datetime
 
 def get_between(string_start, string_end):
 
@@ -163,20 +163,20 @@ def deep_merge(over, under):
 
 
 # Start
-if not os.path.exists('settings.json')
+if not os.path.exists('settings.json'):
     print("No 'settings.json' file")
     with open('settings.json', "w") as json_file: 
-        json_file.write(json.dumps({"remote":"","token":"","update_maui":true,"update_mahuika":true}))
+        json_file.write(json.dumps({"remote":"","token":"","update_maui":True,"update_mahuika":True}))
     print("Empty 'settings.json' file created")
-else
-    with open('settings.json') as json_file: 
-        settings=json.load(json_file)
+
+with open('settings.json') as json_file: 
+    settings=json.load(json_file)
 
 # Update
-
+print(settings)
 # Whether to update.
-mahuikaData = get_mahuika(settings.update_mahuika)
-mauiData = get_maui(settings.update_maui)
+mahuikaData = get_mahuika(settings["update_mahuika"])
+mauiData = get_maui(settings["update_maui"])
 
 #Merge cluster lists
 mergedData=deep_merge(mauiData,mahuikaData)
@@ -195,12 +195,12 @@ with open('domainTags.json') as json_file:
 with open('overwriteApps.json') as json_file: 
         mergedData=deep_merge(mergedData, json.load(json_file))
 
-datetime=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-print("Updated as of " + datetime) 
+timestamp=datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+print("Updated as of " + timestamp) 
 
-output_dict={"modules":mergedData,"date":datetime}
+output_dict={"modules":mergedData,"date":timestamp}
 
 with open('moduleList.json', "w") as json_file: 
-    json_file.write(json.dumps(mergedData))
+    json_file.write(json.dumps(output_dict))
 
 print("Done!")
