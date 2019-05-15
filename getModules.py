@@ -1,20 +1,17 @@
 #!/usr/bin/python
 import subprocess, re, json, socket, requests, os, datetime
 
-def get_between(string_start, string_end):
+# Calls  returns value between input strings.
+def get_between(string_full, string_start, string_end):
 
-    # Calls module avail and returns value between input strings.
-
-    #source /etc/bashrc doesn't work on maui for some reason
-    stdout = subprocess.check_output('module -t avail', stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+    
 
     #Split between start and end strings.
     stdout = stdout.split(string_start)[1].split(string_end)[0]
 
-    #stdout = stdout.split('/opt/nesi/XC50_sles12_skl/modules/all:')[1].split('/opt/cray/ari/modulefiles:')[0]
     return stdout
 
-
+   
 def parse_remain(out_dictionary, cluster):
 
     #For each app in list get details.
@@ -63,36 +60,37 @@ def get_mahuika(call_avail):
     if call_avail :
         print("Reading modules from Mahuika")
         #Check if running on mahuika01, and recheck modules
-        if socket.gethostname()=='mahuika01' or socket.gethostname()=='mahuika02':
+        #source /etc/bashrc doesn't work on maui for some reason
+        
+        print("Working...")
 
-            print("Working...")
-            #Call 
-            stdout = get_between('/opt/nesi/CS400_centos7_bdw/modules/all:', '/opt/nesi/share/modules/all:')
+        stdout = subprocess.check_output('module -t avail', stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        #Call 
+        stdout_trim = get_between(stdout,'/opt/nesi/CS400_centos7_bdw/modules/all:', '/opt/nesi/share/modules/all:')
 
-            #Define empty dictionary
-            mahuikaData={}
-            lastApp=""
+        #Define empty dictionary
+        mahuikaData={}
+        lastApp=""
 
-            #Get names of all apps
-            for line in stdout.split('\n'):
-                #check not nasty 'DefaultModules'
-                if len(line)>0 and line!='DefaultModules' and line!='libpmi':
-                    #Mahuika has seperate row for parent
-                    if line.endswith('/'):
-                        mahuikaData[line[:-1]]={'versions':{}}
-                    else:
-                        mahuikaData[line.split('/')[0]]['versions'][line]=['mahuika']
-                        #out_dictionary[line[:-1]]['versions'].append(line)
+        #Get names of all apps
+        for line in stdout_trim.split('\n'):
+            #check not nasty 'DefaultModules'
+            if len(line)>0 and line!='DefaultModules' and line!='libpmi':
+                #Mahuika has seperate row for parent
+                if line.endswith('/'):
+                    mahuikaData[line[:-1]]={'versions':{}}
+                else:
+                    mahuikaData[line.split('/')[0]]['versions'][line]=['mahuika']
+                    #out_dictionary[line[:-1]]['versions'].append(line)
 
-            mahuikaData = parse_remain(mahuikaData, 'mahuika')
+        mahuikaData = parse_remain(mahuikaData, 'mahuika')
 
-            f = open("mahuikaApps.json","w+")
-            f.write(json.dumps(mahuikaData))
-            f.close()
+        f = open("mahuikaApps.json","w+")
+        f.write(json.dumps(mahuikaData))
+        f.close()
 
-            print("Module avail complete")
-        else:
-            print('Must be run on Mahuika to update module list, using last run data.')
+        print("Module avail complete")
+        
     else:
         print('Skipping Mahuika avail')
 
@@ -100,7 +98,6 @@ def get_mahuika(call_avail):
 
 
 def get_maui(call_avail):
-
     try:
         with open('mauiApps.json') as json_file: 
                 mauiData = json.load(json_file)
@@ -111,37 +108,38 @@ def get_maui(call_avail):
     if call_avail :
         print("Reading modules from Maui")
         #Check if running
-        if  socket.gethostname()=='maui01' or socket.gethostname()=='maui02':
+        print("Working...")
 
-            print("Working...")
+        #Maui module path
+        module_path="/opt/cray/pe/perftools/7.0.2/modulefiles:/opt/cray/pe/craype/2.5.15/modulefiles:/opt/cray/pe/modulefiles:/opt/cray/modulefiles:/opt/modulefiles:/opt/nesi/modulefiles:/opt/nesi/XC50_sles12_skl/modules/all:/opt/nesi/share/modules/all:/opt/cray/ari/modulefiles"
 
-            #Call 
-            stdout = get_between('/opt/nesi/XC50_sles12_skl/modules/all:', '/opt/cray/ari/modulefiles:')
+        stdout = subprocess.check_output('export MODULEPATH={module_path}; module -t avail', stderr=subprocess.STDOUT, shell=True).decode("utf-8")
 
-            #Define empty dictionary
-            mauiData={}
-            lastApp=""
+        #Call 
+        stdout_trim = get_between(stdout,'/opt/nesi/XC50_sles12_skl/modules/all:', '/opt/cray/ari/modulefiles:')
 
-            #Get names of all apps
-            for line in stdout.split('\n'):
-                #Check if this is the same app as last time.
-                thisApp=line.split('/')[0]
-                if len(thisApp)>0:
-                    #If new app, add to dictionary.
-                    if lastApp!=thisApp:
-                        mauiData[thisApp]={'versions':{}}
-                    #If add to versionlist
-                    mauiData[thisApp]['versions'][line]=['maui']
+        #Define empty dictionary
+        mauiData={}
+        lastApp=""
 
-            mauiData = parse_remain(mauiData, 'maui')
+        #Get names of all apps
+        for line in stdout_trim.split('\n'):
+            #Check if this is the same app as last time.
+            thisApp=line.split('/')[0]
+            if len(thisApp)>0:
+                #If new app, add to dictionary.
+                if lastApp!=thisApp:
+                    mauiData[thisApp]={'versions':{}}
+                #If add to versionlist
+                mauiData[thisApp]['versions'][line]=['maui']
 
-            f = open("mauiApps.json","w+")
-            f.write(json.dumps(mauiData))
-            f.close()
+        mauiData = parse_remain(mauiData, 'maui')
 
-            print("Module avail complete")
-        else:
-            print('Must be run on Maui to update module list, using last run data.')
+        f = open("mauiApps.json","w+")
+        f.write(json.dumps(mauiData))
+        f.close()
+
+        print("Module avail complete")
     else:
         print('Skipping Maui avail')
 
@@ -158,7 +156,6 @@ def deep_merge(over, under):
             deep_merge(value, node)
         else:
             under[key] = value
-
     return under
 
 
@@ -174,7 +171,14 @@ with open('settings.json') as json_file:
 
 # Update
 print(settings)
-# Whether to update.
+
+#check if on Mahuika
+if not (socket.gethostname()=='mahuika01' or socket.gethostname()=='mahuika02'):
+    print("Currently must be run from Mahuika. Because I am lazy.")
+    return 1
+
+# Whether to update. If setting=true runs mod avail. If not merge only.
+
 mahuikaData = get_mahuika(settings["update_mahuika"])
 mauiData = get_maui(settings["update_maui"])
 
