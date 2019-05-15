@@ -22,4 +22,4 @@ python getModules.py
 
 * Run ```bash /nesi/project/nesi99999/Callum/moduleThing/run.sh```
 
-* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select /nesi/project/nesi99999/Callum/moduleThing/moduleList.json
+* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select ```/nesi/project/nesi99999/Callum/moduleThing/moduleList.json```
