@@ -14,3 +14,12 @@ python getModules.py
 **domainTags.json** - List of what domain tags to apply.
 
 **overwriteApps.json** - Overwrites.
+
+
+***How to update***
+
+* Add domain labels on git. (Optional).
+
+* Run ```bash /nesi/project/nesi99999/Callum/moduleThing/run.sh```
+
+* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select /nesi/project/nesi99999/Callum/moduleThing/moduleList.json
