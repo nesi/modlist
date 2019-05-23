@@ -1,9 +1,9 @@
 {
     "biology": ["Cufflinks", "Cytoscape", "exonerate", "FreeBayes", "Jellyfish", "ABySS", "angsd", "EMBOSS", "CD-HIT", "ViennaRNA", "Augustus", "AUGUSTUS", "BamTools", "BBMap", "BCFtools", "BEAST", "BEDOPS", "BEDTools", "BioConductor", "Bismark", "BLASR", "blasr_libcpp", "BLAST", "BLAT", "Bowtie", "Bowtie2", "Bpipe", "BreakDancer", "BUSCO", "BWA", "Canu", "Classifier", "Clustal-Omega", "CNVnator", "ctffind", "cutadapt", "DBG2OLC", "DIAMOND", "EMIRGE", "ExaBayes", "ExaML", "FALCON", "FastQC", "Fastq-tools", "fastStructure", "FastTree", "FASTX-Toolkit", "GATK", "GMAP-GSNAP", "Gubbins", "HISAT2", "HMMER", "HTSlib", "IDBA", "IGV", "IMPUTE", "Infernal", "kallisto", "Kraken2", "MAFFT", "MaSuRCA", "MetaVelvet", "Metaxa2", "Mothur", "MotionCorr", "MrBayes", "MultiQC", "MUMmer", "MUSCLE", "ncbi-vdb", "NGS", "nseg", "PBJelly", "PhyML", "picard", "PLINK", "pplacer", "QIIME2", "QUAST", "RAxML", "RECON", "Relion", "RepeatMasker", "RepeatScout", "RMBlast", "RSEM", "Salmon", "Sambamba", "samblaster", "SAMtools", "seqtk", "snpEff", "SOAPdenovo2", "SortMeRNA", "SourceTracker", "SPAdes", "sratoolkit", "Stacks", "STAR", "Subread", "swarm","Supernova","TopHat", "trf", "TrimGalore", "Trinity", "VCFtools", "Velvet", "VSEARCH", "Wise2"],
-    "engineering": ["ANSYS", "COMSOL","OpenFOAM", "MATLAB","ABAQUS","OpenSees","Elmer","FDS"],
+    "engineering": ["ANSYS", "COMSOL","OpenFOAM", "MATLAB","ABAQUS","OpenSees","Elmer","FDS","Octave"],
     "physics": ["COMSOL","BerkeleyGW","FDS","Siesta","UDUNITS"],
     "geology": ["ARCSC","GDAL","GRASS","Python-Geo","RSGISLib","TuiView","Zonation"],
-    "mathematics": ["datamash","Eigen","GEOS","GMP","JAGS","libgpuarray","libxsmm","lp_solve","METIS","MPFR","MUMPS","muParser","Octave","ParMETIS","Python-GPU","SCOTCH","SUNDIALS"],
+    "mathematics": ["MATLAB","datamash","Eigen","GEOS","GMP","JAGS","libgpuarray","libxsmm","lp_solve","METIS","MPFR","MUMPS","muParser","Octave","ParMETIS","Python-GPU","SCOTCH","SUNDIALS"],
     "chemistry":["NWChem","QChem","Gaussian","BEEF","CP2K","GROMACS","LAMMPS","Libint","libxc","Molcas","Molpro","NAMD","Octopus","OpenBabel","ORCA","PLUMED","QuantumESPRESSO","VASP"],
     "language":["Yasm","Tcl","Ruby","Rstudio","R","Python","Perl","nodejs","NASM","Miniconda3","LDC","Java","flex","ErlangOTP","Bison","ANTLR"]
 }
