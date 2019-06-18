@@ -1,27 +1,36 @@
 #!/usr/bin/python
-import subprocess, re, json, socket, requests, os, datetime
+import subprocess, re, json, socket, requests, os, datetime, math, html
 
+#Read file at {path}. If not exist make one with {default} value
+def readmake_json(path,default):
+    if not os.path.exists(path):
+            print(f"No '{path}' file")
+            with open(path, "w") as json_file: 
+                json_file.write(json.dumps(default))
+            print(f"Empty '{path}' file created")
+
+    with open(path) as json_file: 
+        return json.load(json_file)
 # Calls  returns value between input strings.
 def get_between(string_full, string_start, string_end):
 
-    
-
     #Split between start and end strings.
-    stdout = stdout.split(string_start)[1].split(string_end)[0]
+    stdout = string_full.split(string_start)[1].split(string_end)[0]
 
     return stdout
-
-   
-def parse_remain(out_dictionary, cluster):
+ 
+def parse_remain(out_dictionary, cluster, module_path):
 
     #For each app in list get details.
     for key, value in out_dictionary.items():
         
-        #Whatis it
-        data=subprocess.check_output('module -t whatis ' + key, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        #Whatis it this is DUMB DO IT BETTER
+        data=subprocess.check_output("MODULEPATH=" + module_path + "; module -t whatis " + key, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
 
-        #Parse data appropriately(Sorry Peter)
-        #regexShort = r"(?<=Description: ).*(?=" + re.escape(key) + r"/)"
+        #Escape
+        
+        #data = re.escape(data)
+
         regexHomepage=r"(?<=Homepage: )\S*"
         matchesHomepage = re.findall(regexHomepage, data)
         
@@ -35,38 +44,31 @@ def parse_remain(out_dictionary, cluster):
         short=short.split(key + "/")[0]
 
         out_dictionary[key]['short'] = short
+        out_dictionary[key]['cats'] = []
+
 
         if len(matchesHomepage)>0:
             out_dictionary[key]['homepage'] = matchesHomepage[0] #.strip()
         
         out_dictionary[key][cluster] = True
 
-        #print(key + ":")
-        #print(out_dictionary[key])
-        #print('\n')
-
-
     return out_dictionary
 
 def get_mahuika(call_avail):
 
-    try:
-        with open('mahuikaApps.json') as json_file: 
-                mahuikaData = json.load(json_file)
-    except:
-        print("Problem loading mahuikaApps.json, using empty dict")
-        mahuikaData = {}
-    
     if call_avail :
         print("Reading modules from Mahuika")
         #Check if running on mahuika01, and recheck modules
         #source /etc/bashrc doesn't work on maui for some reason
         
-        print("Working...")
+        print("Working... Takes about 100 sec... for some reason")
 
-        stdout = subprocess.check_output('module -t avail', stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        module_path="/opt/cray/pe/craype/default/modulefiles:/opt/cray/pe/modulefiles:/opt/cray/modulefiles:/opt/modulefiles:/opt/nesi/modulefiles:/opt/nesi/CS400_centos7_bdw/modules/all:/opt/nesi/share/modules/all:/cm/local/modulefiles:/cm/shared/modulefiles:/etc/modulefiles"
+        #print("MODULEPATH=" + module_path + "; module -t avail")
+
+        stdout_full = subprocess.check_output(("MODULEPATH=" + module_path + "; module -t avail"), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
         #Call 
-        stdout_trim = get_between(stdout,'/opt/nesi/CS400_centos7_bdw/modules/all:', '/opt/nesi/share/modules/all:')
+        stdout_trim = get_between(stdout_full,'/opt/nesi/CS400_centos7_bdw/modules/all:', '/opt/nesi/share/modules/all:')
 
         #Define empty dictionary
         mahuikaData={}
@@ -83,11 +85,7 @@ def get_mahuika(call_avail):
                     mahuikaData[line.split('/')[0]]['versions'][line]=['mahuika']
                     #out_dictionary[line[:-1]]['versions'].append(line)
 
-        mahuikaData = parse_remain(mahuikaData, 'mahuika')
-
-        f = open("mahuikaApps.json","w+")
-        f.write(json.dumps(mahuikaData))
-        f.close()
+        mahuikaData = parse_remain(mahuikaData, 'mahuika',module_path)
 
         print("Module avail complete")
         
@@ -96,10 +94,9 @@ def get_mahuika(call_avail):
 
     return mahuikaData
 
-
 def get_maui(call_avail):
     try:
-        with open('mauiApps.json') as json_file: 
+        with open('cache/mauiApps.json') as json_file: 
                 mauiData = json.load(json_file)
     except:
         print("Problem loading mauiApps.json, using empty dict")
@@ -112,11 +109,12 @@ def get_maui(call_avail):
 
         #Maui module path
         module_path="/opt/cray/pe/perftools/7.0.2/modulefiles:/opt/cray/pe/craype/2.5.15/modulefiles:/opt/cray/pe/modulefiles:/opt/cray/modulefiles:/opt/modulefiles:/opt/nesi/modulefiles:/opt/nesi/XC50_sles12_skl/modules/all:/opt/nesi/share/modules/all:/opt/cray/ari/modulefiles"
+        #print("MODULEPATH=" + module_path + "; module -t avail")
 
-        stdout = subprocess.check_output('export MODULEPATH={module_path}; module -t avail', stderr=subprocess.STDOUT, shell=True).decode("utf-8")
-
+        stdout_full = subprocess.check_output(("MODULEPATH=" + module_path + "; module -t avail"), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        #print(stdout_full)
         #Call 
-        stdout_trim = get_between(stdout,'/opt/nesi/XC50_sles12_skl/modules/all:', '/opt/cray/ari/modulefiles:')
+        stdout_trim = get_between(stdout_full,'/opt/nesi/XC50_sles12_skl/modules/all:', '/opt/cray/ari/modulefiles:')
 
         #Define empty dictionary
         mauiData={}
@@ -133,9 +131,9 @@ def get_maui(call_avail):
                 #If add to versionlist
                 mauiData[thisApp]['versions'][line]=['maui']
 
-        mauiData = parse_remain(mauiData, 'maui')
+        mauiData = parse_remain(mauiData, 'maui',module_path)
 
-        f = open("mauiApps.json","w+")
+        f = open("cache/mauiApps.json","w+")
         f.write(json.dumps(mauiData))
         f.close()
 
@@ -145,66 +143,108 @@ def get_maui(call_avail):
 
     return mauiData
 
-
 def deep_merge(over, under):
-#Deep merges dictionary
-#If conflict over has pref
+    #Deep merges dictionary
+    #If conflict 'over' has right of way
     for key, value in over.items():
+        #If element is dict, call self.
         if isinstance(value, dict):
-            # get node or create one
             node = under.setdefault(key, {})
             deep_merge(value, node)
+        #If element is list (and non unique) append
+        elif isinstance(value, list) and key in under:
+            #For each member of list
+            for thing in value:
+                #Not duplicate
+                if not thing in under[key]:
+                    under[key].append(thing)
+
+        #If element is other, replace.      
         else:
             under[key] = value
     return under
 
+def get_licences():
+    string_data=subprocess.check_output("sacctmgr -pns show resource", stderr=subprocess.STDOUT, shell=True).decode("utf-8").strip()
 
-# Start
-if not os.path.exists('settings.json'):
-    print("No 'settings.json' file")
-    with open('settings.json', "w") as json_file: 
-        json_file.write(json.dumps({"remote":"","token":"","update_maui":True,"update_mahuika":True}))
-    print("Empty 'settings.json' file created")
+    lic_array=[]
 
-with open('settings.json') as json_file: 
-    settings=json.load(json_file)
+    for lic_string in string_data.split('\n'):
+        lic_string_array=lic_string.split('|')
+        lic_obj={}
+        lic_obj['software']=lic_string_array[0]
+        lic_obj['owner']=lic_string_array[1]
+        lic_obj['number']=math.floor(int(lic_string_array[3])/2)
+        lic_obj['server_type']=lic_string_array[5]
 
-# Update
-print(settings)
+        lic_array.append(lic_obj)
 
-#check if on Mahuika
-if not (socket.gethostname()=='mahuika01' or socket.gethostname()=='mahuika02'):
-    print("Currently must be run from Mahuika. Because I am lazy.")
-    return 1
+    return lic_array
 
-# Whether to update. If setting=true runs mod avail. If not merge only.
+def main():
+    # Start
+    settings=readmake_json('settings.json',{"remote":"","token":"","update_maui":True,"update_mahuika":True})
 
-mahuikaData = get_mahuika(settings["update_mahuika"])
-mauiData = get_maui(settings["update_maui"])
+    #Previous run of module show
+    maui_cache=readmake_json('cache/maui_cache.json',{})
+    mahuika_cache=readmake_json('cache/mahuika_cache.json',{})
 
-#Merge cluster lists
-mergedData=deep_merge(mauiData,mahuikaData)
+    #Last output file, for diffing.
+    full_cache=readmake_json('cache/full_cache.json',{})
 
-#Apply Domain tags
-with open('domainTags.json') as json_file: 
-    domainTags = json.load(json_file)
-    for key, domain in domainTags.items():
-        for app in domain:
-            if app in mergedData:
-                mergedData[app]["cats"]=[key]
-            else:
-                print("Error! Domain tag '" + app + "' does not correspond to a application on the platform.")
- 
-#Apply Overwrites
-with open('overwriteApps.json') as json_file: 
-        mergedData=deep_merge(mergedData, json.load(json_file))
+    # Update
+    print(settings)
 
-timestamp=datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-print("Updated as of " + timestamp) 
+    #check if on Mahuika
+    if not (socket.gethostname()=='mahuika01' or socket.gethostname()=='mahuika02'):
+        print("Currently must be run from Mahuika. Because I am lazy.")
+        return 1
 
-output_dict={"modules":mergedData,"date":timestamp}
+    # Whether to update. If setting=true runs mod avail. If not merge only.
+    mauiData = get_maui(settings["update_maui"])
+    mahuikaData = get_mahuika(settings["update_mahuika"])
 
-with open('moduleList.json', "w") as json_file: 
-    json_file.write(json.dumps(output_dict))
+    #Merge cluster lists
+    mergedData=deep_merge(mauiData,mahuikaData)
 
-print("Done!")
+    #Apply Domain tags
+    with open('domainTags.json') as json_file: 
+        domainTags = json.load(json_file)
+
+        for key, domain in domainTags.items():
+
+            domain = list(dict.fromkeys(domain))
+
+            for app in domain:
+                if app in mergedData:
+
+                    mergedData[app]["cats"].append(key)
+                    mergedData[app]["cats"].sort()
+
+                else:
+                    print("Error! Domain tag '" + app + "' does not correspond to a application on the platform.")
+    
+    #Apply Overwrites
+    with open('overwriteApps.json') as json_file: 
+            mergedData=deep_merge(mergedData, json.load(json_file))
+
+    timestamp=datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print("Updated as of " + timestamp) 
+
+    output_dict={"modules":mergedData,"date":timestamp}
+
+    with open('cache/mahuika_cache.json', "w+") as json_file: 
+        json_file.write(json.dumps(mahuikaData))
+
+    with open('cache/maui_cache.json', "w+") as json_file: 
+        json_file.write(json.dumps(mauiData))
+
+    with open('cache/full_cache.json', "w+") as json_file: 
+        json_file.write(json.dumps(mahuikaData))
+
+    with open('moduleList.json', "w") as json_file: 
+        json_file.write(json.dumps(output_dict))
+
+    print("Done!")
+
+main()
