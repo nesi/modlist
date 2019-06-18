@@ -1,22 +1,14 @@
 # modlist
 
-run
-```
-python getModules.py
-```
 
-**moduleList.json** - output json file.
+**domainTags.json** - List of what domain tags to apply. Please add.
 
-**mahuikaApps.json** - Results of most recent module avail on mahuika.
+**overwrites.json** - Overwrites.
 
-**mauiApps.json** - Results of most recent module avail on maui.
-
-**domainTags.json** - List of what domain tags to apply.
-
-**overwriteApps.json** - Overwrites.
+**aliases.json** - Nice names.
 
 
-***How to update***
+***How to update (NeSI staff)***
 
 * Add domain labels on git. (Optional).
 
