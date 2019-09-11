@@ -1,8 +1,4 @@
-[  
-   {  
-      "uoa":"University of Auckland"
-   },
-   {  
-      "foe":"Faculty of Engineering"
-   }
-]
+{  
+   "uoa":"University of Auckland" 
+   "foe":"Faculty of Engineering"
+}
