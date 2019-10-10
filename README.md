@@ -12,7 +12,7 @@
 
 ***How to update (NeSI staff)***
 
-* Add domain labels on git. (Optional).
+* Add tags, overwrites and aliases. (Optional).
 
 * Updates Daily, or run ```/nesi/project/nesi-apps-admin/module_tracker/module_tracker.py```
 
