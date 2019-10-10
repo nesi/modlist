@@ -1,7 +1,9 @@
 # modlist
 
 
-**domainTags.json** - List of what domain tags to apply. Please add.
+**tags_domains.json** - List of what domain tags to apply. Please add.
+
+**tags_licence_type.json** - Type of licence
 
 **overwrites.json** - Overwrites.
 
@@ -12,6 +14,6 @@
 
 * Add domain labels on git. (Optional).
 
-* Run ```bash /nesi/project/nesi99999/Callum/moduleThing/run.sh```
+* Updates Daily, or run ```/nesi/project/nesi-apps-admin/module_tracker/module_tracker.py```
 
-* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select ```/nesi/project/nesi99999/Callum/moduleThing/moduleList.json```
+* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select ```/nesi/project/nesi-apps-admin/module_tracker/module_list.json```
