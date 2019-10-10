@@ -12,5 +12,4 @@
     "social_science":["ANTLR","Bison","flex","ErlangOTP"],
     "visualisation": ["Python", "R", "NCL", "MATLAB", "IRIS", "Ncview", "XCONV", "ParaView", "VisIt", "VTK","Cytoscape","GRASS","IGV","IQmol", "Mesa", "NCARG", "OSPRay", "ANSYS"],
     "language":["Yasm","Tcl","Ruby","Rstudio","R","Python","Perl","nodejs","NASM","Miniconda3","LDC","Java","ErlangOTP"]
-   
 }
