@@ -16,4 +16,4 @@
 
 * Updates Daily, or run ```/nesi/project/nesi-apps-admin/module_tracker/module_tracker.py```
 
-* Zendesk Guide admin → Customise design → edit code → assets → moduleList.json → ... → replace → select ```/nesi/project/nesi-apps-admin/module_tracker/module_list.json```
+* Zendesk Guide admin → Customise design → edit code → assets → module_list.json → ... → replace → select ```/nesi/project/nesi-apps-admin/module_tracker/module_list.json```
