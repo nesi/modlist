@@ -3,7 +3,6 @@
     "astronomy":[],
     "biology": ["Flye","LAMMPS","NAMD", "NWChem", "OpenBabel","PLUMED","proovread", "seqmagick","LASTZ","Pilon","Porechop","bcl2fastq2","Cufflinks", "Cytoscape", "exonerate", "FreeBayes", "Jellyfish", "ABySS", "angsd", "EMBOSS", "CD-HIT", "ViennaRNA", "Augustus", "AUGUSTUS", "BamTools", "BBMap", "BCFtools", "BEAST", "BEDOPS", "BEDTools", "BioConductor", "Bismark", "BLASR", "blasr_libcpp", "BLAST", "BLAT", "Bowtie", "Bowtie2", "Bpipe", "BreakDancer", "BUSCO", "BWA", "Canu", "Classifier", "Clustal-Omega", "CNVnator", "ctffind", "cutadapt", "DBG2OLC", "DIAMOND", "EMIRGE", "ExaBayes", "ExaML", "FALCON", "FastQC", "Fastq-tools", "fastStructure", "FastTree", "FASTX-Toolkit", "GATK", "GMAP-GSNAP", "Gubbins", "HISAT2", "HMMER", "HTSlib", "IDBA", "IGV", "IMPUTE", "Infernal", "kallisto", "Kraken2", "MAFFT", "MaSuRCA", "MetaVelvet", "Metaxa2", "Mothur", "MotionCorr", "MrBayes", "MultiQC", "MUMmer", "MUSCLE", "ncbi-vdb", "NGS", "nseg", "PBJelly", "PhyML", "picard", "PLINK", "pplacer", "QIIME2", "QUAST", "RAxML", "RECON", "Relion", "RepeatMasker", "RepeatScout", "RMBlast", "RSEM", "Salmon", "Sambamba", "samblaster", "SAMtools", "seqtk", "snpEff", "SOAPdenovo2", "SortMeRNA", "SourceTracker", "SPAdes", "sratoolkit", "Stacks", "STAR", "Subread", "swarm","Supernova","TopHat", "trf", "TrimGalore", "Trinity", "VCFtools", "Velvet", "VSEARCH", "Wise2"],
     "chemistry":["rDock","COMSOL","OpenFOAM","CP2K","NWChem","QChem","Gaussian","BEEF","CP2K","GROMACS","LAMMPS","Libint","libxc","Molcas","Molpro","NAMD","Octopus","OpenBabel","ORCA","PLUMED","QuantumESPRESSO","VASP"],
-    "computer_science":["R","Python","TensorFlow"],
     "earth_science":["ARCSI","RegCM","SPECFEM3D","ESMF","ARCSC","GDAL","GRASS","Python-Geo","RSGISLib","TuiView","Zonation","OpenSees"],
     "engineering": ["OpenFAST","ANSYS", "COMSOL","OpenFOAM", "MATLAB","ABAQUS","OpenSees","Elmer","FDS","imkl","Octave"],
     "mathematics": ["libmatheval","imkl", "GSL", "MATLAB","datamash","Eigen","GEOS","GMP","JAGS","libgpuarray","libxsmm","lp_solve","METIS","MPFR","MUMPS","muParser","Octave","ParMETIS","Python-GPU","SCOTCH","SUNDIALS"],
@@ -13,5 +12,5 @@
     "visualisation": ["Python", "R", "NCL", "MATLAB", "IRIS", "Ncview", "XCONV", "ParaView", "VisIt", "VTK","Cytoscape","GRASS","IGV","IQmol", "Mesa", "NCARG", "OSPRay", "ANSYS"],
     "language":["Yasm","Tcl","Ruby","Rstudio","R","Python","Perl","nodejs","NASM","Miniconda3","LDC","Java","ErlangOTP"],
     "machine_learning":["Python", "TensorFlow", "R", "OpenCV", "Anaconda2", "Anaconda3"],
-    "data_anlytics":["Python", "R"]
+    "data analytics":["Python", "R"]
 }
