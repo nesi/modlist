@@ -1,25 +1,29 @@
 # modlist
 
-Anything starting with "tags" is inside out for convenience. e.g. 
+  Where standard format is:
+  
+   module_list.json
+   ```
+   {
+     module1:{
+         property1:[value1, value2]
+     },
+     module2:{
+         property1:[value1, value2]
+     }
+   }
+  ```
+   I'm defining a 'tag' as an attribute defined in the inverted format:
+   
+  property1_tags.json
+  ```
+   {
+     value1:[module1, module2],
+     value2:[module1, module2]
+   }
+   ```
+  This makes it easier for people to assign optional tags
 
-tags_domains.json
-{
-  "engineering": ["ANSYS", "OpenFOAM", "COMSOL"]
-}
-
-evaluates as
-
-{
-  "ANSYS":{
-    "domains":["engineering"]
-  },
-  "OpenFOAM":{
-    "domains":["engineering"]
-  },
-  "COMSOL":{
-    "domains":["engineering"]
-  }
-}
 
 **tags_domains.json** - List of what domain tags to apply. Please add.
 
