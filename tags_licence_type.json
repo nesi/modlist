@@ -1,1 +1,3 @@
-{"proprietary": ["ABAQUS", "Amber", "ANSYS", "COMSOL", "Gaussian", "MATLAB", "IQmol", "QChem", "GOLD"]}
+{"proprietary": ["ABAQUS", "Amber", "ANSYS", "COMSOL", "Gaussian", "MATLAB", "IQmol", "QChem", "GOLD"],
+"copyleft":[]
+}
